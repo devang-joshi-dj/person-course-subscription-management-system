@@ -11,6 +11,10 @@ const GetPersonDoc = require('./src/utils/searchQueries/GetPersonDoc');
 const GetCourseDoc = require('./src/utils/searchQueries/GetCourseDoc');
 const GetSubscribedCourseDoc = require('./src/utils/searchQueries/GetSubscribedCourseDoc');
 
+const GetCourseCount = require('./src/utils/countQueries/GetCourseCount');
+const GetPersonCount = require('./src/utils/countQueries/GetPersonCount');
+const GetSubscribedCourseCount = require('./src/utils/countQueries/GetSubscribedCourseCount');
+
 const init = async () => {
 	// initalising server
 	const server = Hapi.server({
@@ -49,8 +53,9 @@ const init = async () => {
 	server.route({
 		method: 'GET',
 		path: '/swcc',
-		handler: (request, h) => {
-			return 'Hello World!';
+		handler: async function (request, h) {
+			const status = await GetCourseCount('Status');
+			return status;
 		},
 	});
 
@@ -58,8 +63,9 @@ const init = async () => {
 	server.route({
 		method: 'GET',
 		path: '/awpc',
-		handler: (request, h) => {
-			return 'Hello World!';
+		handler: async function (request, h) {
+			const status = await GetPersonCount('Age');
+			return status;
 		},
 	});
 
@@ -67,8 +73,9 @@ const init = async () => {
 	server.route({
 		method: 'GET',
 		path: '/ciwscc',
-		handler: (request, h) => {
-			return 'Hello World!';
+		handler: async function (request, h) {
+			const status = await GetSubscribedCourseCount('CourseID');
+			return status;
 		},
 	});
 
@@ -76,8 +83,9 @@ const init = async () => {
 	server.route({
 		method: 'GET',
 		path: '/piscc',
-		handler: (request, h) => {
-			return 'Hello World!';
+		handler: async function (request, h) {
+			const status = await GetSubscribedCourseCount('PersonID');
+			return status;
 		},
 	});
 
@@ -85,8 +93,9 @@ const init = async () => {
 	server.route({
 		method: 'GET',
 		path: '/swscc',
-		handler: (request, h) => {
-			return 'Hello World!';
+		handler: async function (request, h) {
+			const status = await GetSubscribedCourseCount('Status');
+			return status;
 		},
 	});
 
@@ -132,9 +141,7 @@ const init = async () => {
 
 			const courseStatus = await GetCourseDoc({ UUID: payload.CourseID });
 			const personStatus = await GetPersonDoc({ UUID: payload.PersonID });
-			console.log(payload);
-			console.log(personStatus);
-			console.log(courseStatus);
+
 			if (personStatus.length && courseStatus.length) {
 				const status = await InsertSubscribedCourse(payload);
 				return status;
