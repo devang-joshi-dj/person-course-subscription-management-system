@@ -21,8 +21,16 @@ const personSchema = new mongoose.Schema({
 		lowercase: true,
 	},
 	Mobile: {
-		type: String,
+		type: Number,
+		required: false,
+		min: 1000000000,
+		validate: {
+			validator: function (val) {
+				if (val) return val.toString().length === 10;
+			},
+			message: val => `${val.value} has to be 10 digits`,
+		},
 	},
 });
 
-module.exports = mongoose.model('Person', personSchema);
+module.exports = mongoose.model('Persons', personSchema);

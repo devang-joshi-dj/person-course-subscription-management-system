@@ -16,8 +16,7 @@ const subscribedSchema = new mongoose.Schema({
 	},
 	Status: {
 		type: String,
-		required: true,
 	},
 });
 
-module.exports = mongoose.model('SubscribedCourse', subscribedSchema);
+module.exports = mongoose.model('subscribedcourses', subscribedSchema);

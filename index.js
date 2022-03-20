@@ -7,6 +7,10 @@ const InsertPerson = require('./src/utils/insertQueries/InsertPerson');
 const InsertCourse = require('./src/utils/insertQueries/InsertCourse');
 const InsertSubscribedCourse = require('./src/utils/insertQueries/InsertSubscribedCourse');
 
+const GetPersonDoc = require('./src/utils/searchQueries/GetPersonDoc');
+const GetCourseDoc = require('./src/utils/searchQueries/GetCourseDoc');
+const GetSubscribedCourseDoc = require('./src/utils/searchQueries/GetSubscribedCourseDoc');
+
 const init = async () => {
 	// initalising server
 	const server = Hapi.server({
@@ -125,9 +129,18 @@ const init = async () => {
 		path: '/addsubscribedcourse',
 		handler: async function (request, h) {
 			const payload = request.payload;
-			const status = await InsertSubscribedCourse(payload);
 
-			return status;
+			const courseStatus = await GetCourseDoc({ UUID: payload.CourseID });
+			const personStatus = await GetPersonDoc({ UUID: payload.PersonID });
+			console.log(payload);
+			console.log(personStatus);
+			console.log(courseStatus);
+			if (personStatus.length && courseStatus.length) {
+				const status = await InsertSubscribedCourse(payload);
+				return status;
+			} else {
+				return 'Invalid PersonID / Course ID';
+			}
 		},
 	});
 
