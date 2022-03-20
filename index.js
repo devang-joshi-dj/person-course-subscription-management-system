@@ -3,6 +3,10 @@
 const Hapi = require('@hapi/hapi');
 const mongoose = require('mongoose');
 
+const InsertPerson = require('./src/utils/insertQueries/InsertPerson');
+const InsertCourse = require('./src/utils/insertQueries/InsertCourse');
+const InsertSubscribedCourse = require('./src/utils/insertQueries/InsertSubscribedCourse');
+
 const init = async () => {
 	// initalising server
 	const server = Hapi.server({
@@ -12,7 +16,7 @@ const init = async () => {
 
 	// establishing connection with mongo
 	mongoose.connect(
-		'mongodb://localhost/employee',
+		'mongodb://localhost/person-course-subscription',
 		() => console.log('Connected with database'),
 		e => console.error(e)
 	);
@@ -28,6 +32,7 @@ const init = async () => {
 		path: 'src/template',
 	});
 
+	// root route with all important links
 	server.route({
 		method: 'GET',
 		path: '/',
@@ -78,6 +83,51 @@ const init = async () => {
 		path: '/swscc',
 		handler: (request, h) => {
 			return 'Hello World!';
+		},
+	});
+
+	// 404 Not Found
+	server.route({
+		method: '*',
+		path: '/{any*}',
+		handler: function (request, h) {
+			return '404 Error! Page Not Found!';
+		},
+	});
+
+	// Adding Person API
+	server.route({
+		method: 'POST',
+		path: '/addperson',
+		handler: async function (request, h) {
+			const payload = request.payload;
+			const status = await InsertPerson(payload);
+
+			return status;
+		},
+	});
+
+	// Adding Course API
+	server.route({
+		method: 'POST',
+		path: '/addcourse',
+		handler: async function (request, h) {
+			const payload = request.payload;
+			const status = await InsertCourse(payload);
+
+			return status;
+		},
+	});
+
+	// Adding Subscribed Course API
+	server.route({
+		method: 'POST',
+		path: '/addsubscribedcourse',
+		handler: async function (request, h) {
+			const payload = request.payload;
+			const status = await InsertSubscribedCourse(payload);
+
+			return status;
 		},
 	});
 

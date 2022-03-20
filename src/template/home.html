@@ -9,11 +9,17 @@
 	<style>
 		a {
 			text-decoration: none;
-			color: black;
+			font-weight: bold;
+			color: cornflowerblue;
 		}
 
 		a:hover {
-			color: cadetblue
+			color: crimson;
+		}
+
+		nav {
+			display: flex;
+			flex-direction: column;
 		}
 	</style>
 </head>
@@ -21,7 +27,7 @@
 <body>
 	<h1>Welcome to the Dashboard</h1>
 	<p>Following are the API-links to get the information:</p>
-	<nav style="display: flex; flex-direction: column;">
+	<nav>
 		<a href="/swcc">Status Wise Course Count</a>
 		<a href="/awpc">Age Wise Person Count</a>
 		<a href="/ciwscc">Course ID wise subscribed courses count</a>
