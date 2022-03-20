@@ -37,7 +37,7 @@ const init = async () => {
 			html: require('handlebars'),
 		},
 		relativeTo: __dirname,
-		path: 'src/template',
+		path: 'src/templates',
 	});
 
 	// root route with all important links
